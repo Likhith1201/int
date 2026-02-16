@@ -1,0 +1,207 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int value) {
+        data = value;
+        left = right = null;
+    }
+}
+
+class BinarySearchTree {
+    Node root;
+
+    Node insertRecursive(Node root, int data) {
+        if (root == null)
+            return new Node(data);
+
+        if (data < root.data)
+            root.left = insertRecursive(root.left, data);
+        else if (data > root.data)
+            root.right = insertRecursive(root.right, data);
+
+        return root;
+    }
+
+    void insertNonRecursive(int data) {
+        Node newNode = new Node(data);
+
+        if (root == null) {
+            root = newNode;
+            return;
+        }
+
+        Node current = root, parent = null;
+
+        while (current != null) {
+            parent = current;
+            if (data < current.data)
+                current = current.left;
+            else
+                current = current.right;
+        }
+
+        if (data < parent.data)
+            parent.left = newNode;
+        else
+            parent.right = newNode;
+    }
+
+    boolean searchRecursive(Node root, int key) {
+        if (root == null)
+            return false;
+
+        if (key == root.data)
+            return true;
+        else if (key < root.data)
+            return searchRecursive(root.left, key);
+        else
+            return searchRecursive(root.right, key);
+    }
+
+    boolean searchNonRecursive(int key) {
+        Node current = root;
+
+        while (current != null) {
+            if (key == current.data)
+                return true;
+            else if (key < current.data)
+                current = current.left;
+            else
+                current = current.right;
+        }
+        return false;
+    }
+
+    Node deleteRecursive(Node root, int key) {
+        if (root == null)
+            return root;
+
+        if (key < root.data)
+            root.left = deleteRecursive(root.left, key);
+        else if (key > root.data)
+            root.right = deleteRecursive(root.right, key);
+        else {
+            if (root.left == null)
+                return root.right;
+            else if (root.right == null)
+                return root.left;
+
+            root.data = minValue(root.right);
+            root.right = deleteRecursive(root.right, root.data);
+        }
+        return root;
+    }
+
+    int minValue(Node root) {
+        int min = root.data;
+        while (root.left != null) {
+            min = root.left.data;
+            root = root.left;
+        }
+        return min;
+    }
+
+    void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+
+    void preorder(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+
+    void postorder(Node root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        BinarySearchTree bst = new BinarySearchTree();
+
+        int choice, value;
+
+        
+            System.out.println("\n--- BST OPERATIONS ---");
+            System.out.println("1. Insert (Recursive)");
+            System.out.println("2. Insert (Non-Recursive)");
+            System.out.println("3. Search (Recursive)");
+            System.out.println("4. Search (Non-Recursive)");
+            System.out.println("5. Delete (Recursive)");
+            System.out.println("6. Inorder Traversal");
+            System.out.println("7. Preorder Traversal");
+            System.out.println("8. Postorder Traversal");
+            System.out.println("9. Exit");
+            do {
+            System.out.print("\nEnter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    bst.root = bst.insertRecursive(bst.root, value);
+                    System.out.println("Inserted " + value);
+                    break;
+
+                case 2:
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    bst.insertNonRecursive(value);
+                    System.out.println("Inserted " + value);
+                    break;
+
+                case 3:
+                    System.out.print("Enter value to search: ");
+                    value = sc.nextInt();
+                    System.out.println(bst.searchRecursive(bst.root, value) ? "Found" : "Not Found");
+                    break;
+
+                case 4:
+                    System.out.print("Enter value to search: ");
+                    value = sc.nextInt();
+                    System.out.println(bst.searchNonRecursive(value) ? "Found" : "Not Found");
+                    break;
+
+                case 5:
+                    System.out.print("Enter value to delete: ");
+                    value = sc.nextInt();
+                    bst.root = bst.deleteRecursive(bst.root, value);
+                    System.out.println("Deleted " + value);
+                    break;
+
+                case 6:
+                    System.out.print("Inorder: ");
+                    bst.inorder(bst.root);
+                    break;
+
+                case 7:
+                    System.out.print("Preorder: ");
+                    bst.preorder(bst.root);
+                    break;
+
+                case 8:
+                    System.out.print("Postorder: ");
+                    bst.postorder(bst.root);
+                    break;
+            }
+        } while (choice != 9);
+
+        sc.close();
+    }
+}
