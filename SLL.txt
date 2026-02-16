@@ -1,0 +1,221 @@
+import java.util.Scanner;
+class Node{
+    int data;
+    Node next;
+    Node(int data){
+        this.data=data;
+        this.next=null;
+    }
+}
+class SingleLinkedList{
+    Node head;
+    public void insertAtBeginning(int data){
+        Node newNode=new Node(data);
+        if(head==null){
+            head=newNode;
+        }else{
+            newNode.next=head;
+            head=newNode;
+        }
+    }
+    public void insertAtEnd(int data){
+        Node newNode=new Node(data);
+        if(head==null){
+            head=newNode;
+        }else{
+            Node current=head;
+            while(current.next!=null){
+                current=current.next;
+            }
+            current.next=newNode;
+        }
+    }
+    public void insertBeforeNode(int data, int beforeData){
+        Node newNode=new Node(data);
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        if(head.data==beforeData){
+            newNode.next=head;
+            head=newNode;
+            return;
+        }
+        Node current=head;
+        while(current.next!=null && current.next.data!=beforeData){
+            current=current.next;
+        }
+        if(current.next==null){
+            System.out.println("Node with data "+beforeData+" not found");
+        }else{
+            newNode.next=current.next;
+            current.next=newNode;
+        }
+    }
+    public void insertAfterNode(int data, int afterData){
+        Node newNode=new Node(data);
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        Node current=head;
+        while(current!=null && current.data!=afterData){
+            current=current.next;
+        }
+        if(current==null){
+            System.out.println("Node with data "+afterData+" not found");
+        }else{
+            newNode.next=current.next;
+            current.next=newNode;
+        }
+    }
+    public void deletAtBeginning(){
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        head=head.next;
+    }
+
+    public void deletAtEnd(){
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        if(head.next==null){
+            head=null;
+            return;
+        }
+        Node current=head;
+        while(current.next.next!=null){
+            current=current.next;
+        }
+        current.next=null;
+    }
+    public void deleteTargetNode(int targetData){
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        if(head.data==targetData){
+            head=head.next;
+            return;
+        }
+        Node current=head;
+        while(current.next!=null && current.next.data!=targetData){
+            current=current.next;
+        }
+        if(current.next==null){
+            System.out.println("Node with data "+targetData+" not found");
+        }else{
+            current.next=current.next.next;
+        }
+    }
+
+    public void display(){
+        if(head==null){
+            System.out.println("List is empty");
+            return;
+        }
+        Node current=head;
+        while(current!=null){
+            System.out.print(current.data+" -> ");
+            current=current.next;
+        }
+        System.out.println("null");
+    }
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        SingleLinkedList sll = new SingleLinkedList();
+        Scanner sc = new Scanner(System.in);
+        int choice, preference, data, targetData;
+
+        while (true) {
+            System.out.println("\n=== SINGLE LINKED LIST MENU ===");
+            System.out.println("1. Insertion");
+            System.out.println("2. Deletion");
+            System.out.println("3. Display");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter data: ");
+                    data = sc.nextInt();
+
+                    System.out.println("Where do you want to insert?");
+                    System.out.println("1. At Beginning");
+                    System.out.println("2. At End");
+                    System.out.println("3. Before a Node");
+                    System.out.println("4. After a Node");
+                    System.out.print("Enter preference: ");
+                    preference = sc.nextInt();
+
+                    switch (preference) {
+                        case 1:
+                            sll.insertAtBeginning(data);
+                            break;
+                        case 2:
+                            sll.insertAtEnd(data);
+                            break;
+                        case 3:
+                            System.out.print("Enter reference (before which to insert): ");
+                            targetData = sc.nextInt();
+                            sll.insertBeforeNode(data, targetData);
+                            break;
+                        case 4:
+                            System.out.print("Enter reference (after which to insert): ");
+                            targetData = sc.nextInt();
+                            sll.insertAfterNode(data, targetData);
+                            break;
+                        default:
+                            System.out.println("Invalid preference!");
+                    }
+                    break;
+
+                case 2:
+                    System.out.println("Where do you want to delete?");
+                    System.out.println("1. At Beginning");
+                    System.out.println("2. At End");
+                    System.out.println("3. Delete Target Node");
+                    System.out.print("Enter preference: ");
+                    preference = sc.nextInt();
+
+                    switch (preference) {
+                        case 1:
+                            sll.deletAtBeginning();
+                            break;
+                        case 2:
+                            sll.deletAtEnd();
+                            break;
+                        case 3:
+                            System.out.print("Enter data to delete: ");
+                            targetData = sc.nextInt();
+                            sll.deleteTargetNode(targetData);
+                            break;
+                        default:
+                            System.out.println("Invalid preference!");
+                    }
+                    break;
+
+                case 3:
+                    sll.display();
+                    break;
+
+                case 4:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
+ 

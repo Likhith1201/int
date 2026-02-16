@@ -1,0 +1,95 @@
+import java.util.Scanner;
+
+class Queue {
+	int[] arr;
+	int size, front, rear;
+
+	Queue(int size) {
+		this.size = size;
+		this.arr = new int[size];
+		this.front = -1;
+		this.rear = -1;
+	}
+
+	public boolean isEmpty() {
+		return (front == -1);
+	}
+
+	public boolean isFull() {
+		return (rear == size-1);
+	}
+
+	public void enqueue(int value) {
+		if(isFull()) {
+			System.out.println("Queue Overflow");
+			return;
+		} else if (isEmpty()) {
+			front++;
+		}
+		arr[++rear] = value;
+		System.out.println(value + " has been enqueued");
+	}
+
+	public void dequeue() {
+		if(isEmpty()) {
+			System.out.println("Queue Underflow");
+		} else {
+			int value = arr[front];
+			if(front == rear) {
+				front = -1;
+				rear = -1;
+			} else {
+				front++;
+			}
+			System.out.println(value + " has been dequeued");
+		}
+	}
+
+	public void display() {
+		if(isEmpty()) {
+			System.out.println("Queue Underflow");
+			return;
+		}
+		for(int i=front; i<=rear; i++) {
+			System.out.print(arr[i] + " ");
+		}
+		System.out.println();
+	}
+}
+
+class Main {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int size, choice, value;
+		System.out.print("Enter size of the queue: ");
+		size = sc.nextInt();
+
+		Queue queue = new Queue(size);
+
+		while(true) {
+			System.out.println("\n===QUEUE OPERATIONS===");
+			System.out.println("1. Enqueue\n2. Dequeue\n3. Display\n4. Exit");
+			System.out.print("Enter your choice: ");
+			choice = sc.nextInt();
+			switch(choice) {
+			case 1:
+				System.out.print("Enter the value: ");
+				value = sc.nextInt();
+				queue.enqueue(value);
+				break;
+			case 2:
+				queue.dequeue();
+				break;
+			case 3:
+				queue.display();
+				break;
+			case 4:
+				System.out.println("Exiting...");
+				sc.close();
+				System.exit(0);
+			default:
+				System.out.println("Invalid choice, Try again");
+			}
+		}
+	}
+}

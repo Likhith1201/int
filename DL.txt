@@ -1,0 +1,213 @@
+import java.util.*;
+
+class Node{
+    int data;
+    Node prev;
+    Node next;
+    Node(int data){
+        this.data = data;
+    }
+}
+
+class DoubleLinkedList{
+    Node head;
+    
+    void insertAtBeginning(int data){
+        Node newNode = new Node(data);
+        if(head == null){
+            head = newNode;
+            return;
+        }
+        newNode.next = head;
+        head.prev = newNode;
+        head = newNode;
+    }
+    
+    void insertAtEnd(int data){
+        Node newNode = new Node(data);
+        if(head == null){
+            head = newNode;
+            return;
+        }
+        Node temp = head;
+        while(temp.next != null){
+            temp = temp.next;
+        }
+        newNode.prev = temp;
+        temp.next = newNode;
+    }
+    
+    void insertBeforePosition(int data,int pos){
+        Node newNode = new Node(data);
+        if(pos == 0 || head == null){
+            newNode.next = head;
+            if(head != null){
+                head.prev = newNode;
+            }
+            head = newNode;
+            return;
+        }
+        Node temp = head;
+        int index = 0;
+        while(temp != null && index < pos - 1){
+            temp = temp.next;
+            index ++;
+        }
+        if(temp == null){
+            System.out.println("Position out of range..!!");
+            return;
+        }
+        newNode.next = temp.next;
+        newNode.prev = temp;
+        temp.next = newNode;
+        newNode.next.prev = newNode;
+    }
+    
+    void insertAfterPosition(int data,int pos){
+        Node newNode = new Node(data);
+        if(head == null ){
+            if(pos == 0){
+                head = newNode;
+                return;
+            }else{
+                System.out.println("Position out of range..!!");
+                return;
+            }
+        }
+        Node temp = head;
+        int index = 0;
+        while(temp != null && index < pos){
+            temp = temp.next;
+            index++;
+        }
+        if(temp == null){
+            System.out.println("Position out of range..!!");
+            return;
+        }
+        newNode.next = temp.next;
+        newNode.prev = temp;
+        temp.next = newNode;
+        
+        if(newNode.next != null){
+            newNode.next.prev = newNode;
+        }
+    }
+    
+    void deleteAtBegininng(){
+        if(head == null){
+            System.out.println("List is Empty..,We can't perform deletion..!!");
+            return;
+        }
+        head = head.next;
+        head.prev = null;
+    }
+    
+}
+
+public class Main {
+    public static void main(String[] args) {
+        DoubleLinkedList list = new DoubleLinkedList();
+        Scanner sc = new Scanner(System.in);
+        int choice, subChoice, data, pos;
+
+        while (true) {
+            System.out.println("\n--- Main Menu ---");
+            System.out.println("1. Insertion");
+            System.out.println("2. Deletion");
+            System.out.println("3. Display List");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+
+                case 1:
+                    System.out.println("\n--- Insertion Menu ---");
+                    System.out.println("1. Insert at Beginning");
+                    System.out.println("2. Insert at End");
+                    System.out.println("3. Insert Before Position");
+                    System.out.println("4. Insert After Position");
+                    System.out.print("Enter your choice: ");
+                    subChoice = sc.nextInt();
+
+                    switch (subChoice) {
+                        case 1:
+                            System.out.print("Enter data: ");
+                            data = sc.nextInt();
+                            list.insertAtBeginning(data);
+                            break;
+
+                        case 2:
+                            System.out.print("Enter data: ");
+                            data = sc.nextInt();
+                            list.insertAtEnd(data);
+                            break;
+
+                        case 3:
+                            System.out.print("Enter data: ");
+                            data = sc.nextInt();
+                            System.out.print("Enter position: ");
+                            pos = sc.nextInt();
+                            list.insertBeforePosition(data, pos);
+                            break;
+
+                        case 4:
+                            System.out.print("Enter data: ");
+                            data = sc.nextInt();
+                            System.out.print("Enter position: ");
+                            pos = sc.nextInt();
+                            list.insertAfterPosition(data, pos);
+                            break;
+
+                        default:
+                            System.out.println("Invalid insertion choice!");
+                    }
+                    break;
+
+                case 2:
+                    System.out.println("\n--- Deletion Menu ---");
+                    System.out.println("1. Delete from Beginning");
+                    System.out.print("Enter your choice: ");
+                    subChoice = sc.nextInt();
+
+                    switch (subChoice) {
+                        case 1:
+                            list.deleteAtBegininng();
+                            break;
+
+                        default:
+                            System.out.println("Invalid deletion choice!");
+                    }
+                    break;
+
+                case 3:
+                    display(list);
+                    break;
+
+                case 4:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    public static void display(DoubleLinkedList list) {
+        Node temp = list.head;
+
+        if (temp == null) {
+            System.out.println("List is Empty!");
+            return;
+        }
+
+        System.out.println("Doubly Linked List:");
+        while (temp != null) {
+            System.out.print(temp.data + " <-> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
+}

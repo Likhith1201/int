@@ -1,0 +1,103 @@
+import java.util.Scanner;
+
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class Stack {
+    Node head = null;
+    public void Push(int value) {
+        Node newNode = new Node(value);
+        if(head == null) {
+            head = newNode;
+            return;
+        }
+        newNode.next = head;
+        head = newNode;
+        System.out.println(newNode.data + " pushed into stack");
+    }
+
+    public void Pop() {
+        if(head == null) {
+            System.out.println("Stack is empty");
+            return;
+        }
+        System.out.println(head.data + " popped from stack");
+        head = head.next;
+    }
+
+    public int Peek() {
+        if (head == null) {
+            System.out.println("Stack is empty");
+            return -1; 
+        }
+        return head.data;
+    }
+
+    public void Display() {
+        if(head == null) {
+            return;
+        }
+        Node temp = head;
+        while(temp != null) { 
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+    }
+    
+    public boolean isEmpty() {
+        return head == null;
+    }
+}
+
+class Main {
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Stack stack = new Stack();
+        while(true) {
+            System.out.println("=== STACK OPERATIONS ===");
+            System.out.println("1. Push");
+            System.out.println("2. Pop");
+            System.out.println("3. Peek (Top element)");
+            System.out.println("4. Display Stack");
+            System.out.println("5. Exit");
+            System.out.print("\nEnter your choice: ");
+            
+            int choice = sc.nextInt();
+            
+            switch(choice){
+                case 1:
+                    System.out.print("Enter value to push: ");
+                    int value = sc.nextInt();
+                    stack.Push(value);
+                    break;
+                case 2:
+                    stack.Pop();
+                    break;
+                case 3:
+                    if (!stack.isEmpty()) {
+                        System.out.println("The top of the stack is " + stack.Peek());
+                    } else {
+                        System.out.println("Stack is empty");
+                    }
+                    break;
+                case 4:
+                    stack.Display();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    return;
+                default:
+                    System.out.println("Invalid choice");
+            }
+            System.out.println();
+        }
+    }
+}
