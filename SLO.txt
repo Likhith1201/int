@@ -1,0 +1,163 @@
+import java.util.Scanner;
+
+class LinkedListOperations {
+
+    static class Node {
+        int data;
+        Node next;
+
+        Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    Node head;
+
+    public void add(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            return;
+        }
+
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = newNode;
+    }
+
+    public void display() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
+
+    public void reverse() {
+        Node prev = null, current = head, next;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+    }
+
+    public void sort() {
+        if (head == null) return;
+
+        boolean swapped;
+        Node ptr1;
+        Node lptr = null;
+
+        do {
+            swapped = false;
+            ptr1 = head;
+
+            while (ptr1.next != lptr) {
+                if (ptr1.data > ptr1.next.data) {
+                    int temp = ptr1.data;
+                    ptr1.data = ptr1.next.data;
+                    ptr1.next.data = temp;
+                    swapped = true;
+                }
+                ptr1 = ptr1.next;
+            }
+            lptr = ptr1;
+        } while (swapped);
+    }
+
+    public void removeDuplicates() {
+        Node current = head;
+
+        while (current != null && current.next != null) {
+            if (current.data == current.next.data) {
+                current.next = current.next.next;
+            } else {
+                current = current.next;
+            }
+        }
+    }
+
+    public static Node merge(Node l1, Node l2) {
+        Node dummy = new Node(0);
+        Node tail = dummy;
+
+        while (l1 != null && l2 != null) {
+            if (l1.data <= l2.data) {
+                tail.next = l1;
+                l1 = l1.next;
+            } else {
+                tail.next = l2;
+                l2 = l2.next;
+            }
+            tail = tail.next;
+        }
+
+        if (l1 != null) tail.next = l1;
+        if (l2 != null) tail.next = l2;
+
+        return dummy.next;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        LinkedListOperations list1 = new LinkedListOperations();
+
+        System.out.print("Enter number of elements in first list: ");
+        int n1 = sc.nextInt();
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n1; i++) {
+            list1.add(sc.nextInt());
+        }
+
+        System.out.println("\nOriginal First List:");
+        list1.display();
+
+        list1.sort();
+        System.out.println("Sorted First List:");
+        list1.display();
+
+        list1.removeDuplicates();
+        System.out.println("After Removing Duplicates:");
+        list1.display();
+
+        list1.reverse();
+        System.out.println("Reversed First List:");
+        list1.display();
+
+
+        LinkedListOperations list2 = new LinkedListOperations();
+
+        System.out.print("\nEnter number of elements in second list: ");
+        int n2 = sc.nextInt();
+
+        System.out.println("Enter elements:");
+        for (int i = 0; i < n2; i++) {
+            list2.add(sc.nextInt());
+        }
+
+        list2.sort();
+
+        Node mergedHead = merge(list1.head, list2.head);
+
+        System.out.println("\nMerged List:");
+        Node temp = mergedHead;
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+
+        sc.close();
+    }
+}
